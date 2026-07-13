@@ -1,0 +1,33 @@
+<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Times New Roman', Times, serif; font-size: 12pt; color: #000; }
+.page { width: 210mm; min-height: 297mm; padding: 20mm 25mm; position: relative; background: #fff; }
+.header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12mm; border-bottom: 2px solid #1a6b7c; padding-bottom: 4mm; }
+.company-info { text-align: right; }
+.company-name { font-size: 16pt; font-weight: bold; color: #1a6b7c; letter-spacing: 0.5px; }
+.company-sub { font-size: 9pt; color: #555; margin-top: 1mm; }
+.doc-meta { text-align: right; font-size: 9pt; color: #666; margin-bottom: 6mm; }
+.doc-title { font-size: 14pt; font-weight: bold; text-align: center; text-transform: uppercase; letter-spacing: 1px; margin: 8mm 0 6mm; border-top: 1px solid #ddd; border-bottom: 1px solid #ddd; padding: 3mm 0; }
+.body-text { text-indent: 12mm; line-height: 1.9; text-align: justify; margin: 4mm 0; }
+.hardware-list { margin: 4mm 0 4mm 18mm; line-height: 1.9; }
+.hardware-list li { margin-bottom: 1mm; }
+.bank-block { margin: 4mm 0 4mm 30mm; line-height: 2; }
+.bank-row { display: flex; gap: 8mm; }
+.bank-label { font-weight: bold; min-width: 20mm; }
+.signature-block { margin-top: 16mm; text-align: right; line-height: 2; }
+.footer { position: absolute; bottom: 10mm; left: 25mm; right: 25mm; border-top: 1px solid #ccc; padding-top: 2mm; font-size: 8pt; color: #888; display: flex; justify-content: space-between; }
+</style>
+</head>
+<body><div class="page">
+  <div class="header">
+    {{#if logoBase64}}<img src="{{logoBase64}}" style="height:50px;" alt="ARX Logo">{{/if}}
+    <!-- <div class="company-info"><div class="company-name">ARX Ingenierie &amp; Conseil</div>{{#if entityAddress}}<div class="company-sub">{{entityAddress}}</div>{{/if}}</div> -->
+  </div>
+  <div class="doc-meta"><p>{{city}}, le {{date}}</p><p>Document {{documentRef}}</p></div>
+  <div class="doc-title">Attestation de Travail</div>
+  <p class="body-text">Je soussigne <strong>{{dgName}}</strong> titulaire de la CIN N&deg; {{dgCin}} delivree a {{dgCinCity}} le {{dgCinDate}} <strong>{{dgTitle}}</strong> de la societe ARX Ingenierie, atteste par la presente que <strong>{{civilite}} {{fullName}}</strong> titulaire de la CIN N&deg; {{nationalId}} delivree a {{cinCity}} le {{cinDate}} ; occupe le poste de <strong>{{jobTitle}}</strong> au sein de notre Societe et ce depuis <strong>{{hireDate}}</strong> dans le cadre d'un contrat de travail a duree <strong>{{contractDuration}}</strong>.</p>
+  <p class="body-text">Cette attestation est delivree a l'interesse pour servir et valoir ce que de droit.</p>
+  <div class="signature-block"><p>Le {{dgTitle}}</p><p style="margin-top:12mm;"><strong>{{dgName}}</strong></p></div>
+  <div class="footer"><span>Code de verification : {{verificationCode}}</span><span>{{documentRef}} - {{date}}</span></div>
+</div></body></html>

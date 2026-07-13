@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Devis</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;200;500;600;500&display=swap');
+    
+    :root {
+      --doc-color: #004A80;
+      --doc-color-light: #004A80;
+      --doc-color-dark: #00355D;
+    }
+    
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+      margin: 0;
+      padding: 0;
+    }
+    
+    .page-container {
+      width: 210mm;
+      min-height: 297mm;
+      max-height: 297mm;
+      margin: 0 auto;
+      background: white;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    
+    .content-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    
+    .content-area {
+      flex: 1;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .scrollable-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0;
+    }
+    
+    .signature-section {
+      flex-shrink: 0;
+      margin-top: auto;
+    }
+    
+    .footer-section {
+      flex-shrink: 0;
+      margin-top: 0;
+    }
+    
+    @media print {
+      body {
+        background: white !important;
+        margin: 0;
+        padding: 0;
+      }
+      
+      .page-container {
+        width: 210mm;
+        height: 297mm;
+        max-height: 297mm;
+        margin: 0;
+        page-break-after: avoid;
+        page-break-inside: avoid;
+      }
+      
+      .avoid-break {
+        page-break-inside: avoid;
+      }
+      
+      .keep-together {
+        page-break-inside: avoid;
+      }
+      
+      table {
+        page-break-inside: avoid;
+      }
+      
+      tr {
+        page-break-inside: avoid;
+        page-break-after: avoid;
+      }
+      
+      thead {
+        display: table-header-group;
+      }
+      
+      thead tr th {
+        background: linear-gradient(to right, var(--doc-color), var(--doc-color-dark)) !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      
+      .scrollable-content {
+        overflow: visible;
+      }
+      
+      @page {
+        margin: 0;
+        size: A4;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-container">
+    <div class="content-wrapper">
+      <div class="content-area">
+        <div class="scrollable-content">
+          <!-- Compact Header -->
+          <div class="avoid-break">
+            <div class="relative bg-gradient-to-r from-[#004A80] to-[#00355D] p-2 text-white">
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
+        <div class="flex items-center gap-3">
+          <div class="bg-gradient-to-r from-[#004A80] to-[#004A80]/80 p-2 rounded-lg">
+            <img src="{{logoBase64}}" alt="Logo Société" class="w-32 h-10 object-contain bg-white/90 p-1.5 rounded">
+          </div>
+          <div>
+            <h1 class="text-xl font-bold tracking-tight">DEVIS</h1>
+            <div class="inline-block mt-0.5 px-2 py-0.5 bg-white/10 rounded text-xs font-medium">
+              N°: <span class="font-bold text-blue-300">{{devisNumber}}</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="text-right">
+          <div class="text-2xl font-black text-blue-200 opacity-90">DEVIS</div>
+          <div class="text-sm font-medium text-gray-300">{{companyName}}</div>
+        </div>
+      </div>
+    </div>
+
+          <!-- Informations Société et Client -->
+          <div class="avoid-break p-2 grid grid-cols-1 lg:grid-cols-2 gap-2">
+      <!-- Société -->
+      <div class="bg-gradient-to-br from-slate-50 to-white rounded-lg p-3 border border-slate-200">
+        <div class="flex items-center gap-2 mb-2">
+          <div class="w-1.5 h-5 bg-[#004A80] rounded-full"></div>
+          <h3 class="text-sm font-bold text-gray-800 uppercase">PRESTATAIRE</h3>
+        </div>
+        <div class="space-y-2 text-xs">
+          <div>
+            <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Société</div>
+            <div class="text-sm font-bold text-gray-900">{{companyName}}</div>
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Matricule</div>
+              <div class="font-medium text-gray-800">{{legalRegistration}}</div>
+            </div>
+            <div>
+              <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Site web</div>
+              <div class="font-medium text-gray-800">{{website}}</div>
+            </div>
+            <div>
+              <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Contact</div>
+              <div class="font-medium text-gray-800">{{contactNumber}}</div>
+            </div>
+            <div>
+              <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider">EMail</div>
+              <div class="font-medium text-gray-800">{{email}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Client -->
+      <div class="bg-gradient-to-br from-[#004A80]/10 to-white rounded-lg p-3 border border-[#004A80]/20">
+        <div class="flex items-center gap-2 mb-2">
+          <div class="w-1.5 h-5 bg-[#004A80] rounded-full"></div>
+          <h3 class="text-sm font-bold text-gray-800 uppercase">CLIENT</h3>
+        </div>
+        <div class="space-y-2 text-xs">
+          <div>
+            <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Nom</div>
+            <div class="text-sm font-bold text-gray-900">{{clientName}}</div>
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Matricule</div>
+              <div class="font-medium text-gray-800">{{clientFiscal}}</div>
+            </div>
+            <div>
+              <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Contact</div>
+              <div class="font-medium text-gray-800">{{clientContact}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+          <!-- Détails du Devis -->
+          <div class="avoid-break px-2 pb-2">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+        <div class="bg-gradient-to-r from-[#004A80]/10 to-[#004A80]/5 rounded p-2 border border-[#004A80]/20">
+          <div class="text-xs font-semibold text-[#004A80] uppercase tracking-wider">Date</div>
+          <div class="text-sm font-bold text-gray-900">{{createdAt}}</div>
+        </div>
+      </div>
+    </div>
+
+          <!-- Tableau des Produits -->
+          <div class="p-2">
+            <div class="overflow-hidden rounded-lg border border-gray-200">
+              <table class="min-w-full text-xs" style="font-size: 0.65rem;">
+          <thead>
+            <tr class="bg-gradient-to-r from-[#004A80] to-[#00355D]">
+              <th class="py-2 px-3 text-left text-xs font-bold text-blue-200 uppercase tracking-wider border-r border-[#004A80]/50">#</th>
+              <th class="py-2 px-3 text-left text-xs font-bold text-blue-200 uppercase tracking-wider border-r border-[#004A80]/50">Produit</th>
+              <th class="py-2 px-3 text-left text-xs font-bold text-blue-200 uppercase tracking-wider border-r border-[#004A80]/50">P.U. HT</th>
+              <th class="py-2 px-3 text-left text-xs font-bold text-blue-200 uppercase tracking-wider border-r border-[#004A80]/50">Qté</th>
+              <th class="py-2 px-3 text-left text-xs font-bold text-blue-200 uppercase tracking-wider border-r border-[#004A80]/50">Unité</th>
+              <th class="py-2 px-3 text-left text-xs font-bold text-blue-200 uppercase tracking-wider border-r border-[#004A80]/50">Remise</th>
+              <th class="py-2 px-3 text-left text-xs font-bold text-blue-200 uppercase tracking-wider">Total HT</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200">
+            {{#each items}}
+            <tr class="hover:bg-gray-50 keep-together">
+              <td class="py-2 px-3 text-center font-bold text-gray-500 border-r">
+                <div class="inline-flex items-center justify-center w-6 h-6 bg-gradient-to-r from-[#004A80]/10 to-[#004A80]/5 rounded-full text-xs">
+                  {{inc @index}}
+                </div>
+              </td>
+              <td class="py-2 px-3 font-medium text-gray-900 border-r truncate max-w-[180px]">{{produit}}</td>
+              <td class="py-2 px-3 text-right font-semibold text-gray-900 border-r">{{formatMillimes pu}}</td>
+              <td class="py-2 px-3 text-center font-semibold text-gray-900 border-r">{{quantite}}</td>
+              <td class="py-2 px-3 text-center text-gray-500 border-r">{{unit}}</td>
+              <td class="py-2 px-3 text-center border-r">
+                <span class="inline-block px-1.5 py-0.5 bg-gradient-to-r from-amber-50 to-yellow-50 text-amber-500 font-semibold rounded text-xs">
+                  {{formatMillimes remise}}%
+                </span>
+              </td>
+              <td class="py-2 px-3 text-right font-bold text-[#004A80]">{{formatMillimes totalItem}}</td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+          <!-- Totaux -->
+          <div class="avoid-break px-2 pb-2">
+            <div class="max-w-sm ml-auto">
+              <div class="bg-gradient-to-br from-[#004A80]/5 to-white rounded-lg p-2 border border-[#004A80]/20">
+          <div class="space-y-2">
+            <div class="flex justify-between items-center py-1 border-b border-gray-200">
+              <span class="text-sm font-semibold text-gray-500">Total HT:</span>
+              <span class="text-sm font-bold text-gray-900">{{formatMillimes totalHT}} TND</span>
+            </div>
+
+            {{#if showFodec}}
+            <div class="flex justify-between items-center py-1 border-b border-gray-200">
+              <span class="text-sm font-semibold text-gray-500">FODEC ({{fodec}}%):</span>
+              <span class="text-sm font-bold text-[#337551]">{{formatMillimes totalFodec}} TND</span>
+            </div>
+            {{/if}}
+            
+            {{#if showTVA}}
+            <div class="flex justify-between items-center py-1 border-b border-gray-200">
+              <span class="text-sm font-semibold text-gray-500">TVA ({{tva}}%):</span>
+              <span class="text-sm font-bold text-[#337551]">{{formatMillimes totalTax}} TND</span>
+            </div>
+            {{/if}}
+            
+            <div class="flex justify-between items-center py-1 border-b border-gray-200">
+              <span class="text-sm font-semibold text-gray-500">Timbre:</span>
+              <span class="text-sm font-bold text-amber-600">{{formatMillimes timbre}} TND</span>
+            </div>
+            
+            <div class="flex justify-between items-center pt-2 border-t border-gray-300">
+              <div>
+                <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Devis Total</div>
+                <div class="text-lg font-black text-gray-900">TOTAL TTC</div>
+              </div>
+              <div class="text-xl font-black bg-gradient-to-r from-[#004A80] to-[#004A80]/80 bg-clip-text text-transparent">
+                {{formatMillimes total}} TND
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+          <!-- Montant en Lettres -->
+          <div class="avoid-break px-2 pb-2">
+            <div class="max-w-2xl mx-auto">
+              <div class="bg-gradient-to-br from-[#004A80]/10 to-white rounded-lg p-2 border border-[#004A80]/20">
+          <div class="flex items-center gap-2 mb-2">
+            <div class="w-2 h-2 bg-[#004A80] rounded-full"></div>
+            <h4 class="text-sm font-semibold text-[#004A80] uppercase tracking-wider">MONTANT EN LETTRES</h4>
+          </div>
+          <div class="text-sm text-gray-800 italic">{{totalLetters}}</div>
+        </div>
+      </div>
+    </div>
+
+        </div>
+        
+        <!-- Signature Section - Always above footer -->
+        <div class="signature-section avoid-break border-t border-gray-200">
+          <div class="p-2 pb-16">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <!-- Signature -->
+              <div class="text-center">
+                <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Signature et Cachet</div>
+                {{#if signature}}
+                <img src="{{signature}}" alt="Signature" class="mx-auto w-32 h-16 object-contain">
+                {{else}}
+                <div class="w-40 h-0.5 bg-gradient-to-r from-[#004A80] to-[#004A80]/80 mx-auto"></div>
+                {{/if}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

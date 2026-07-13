@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bon de Livraison</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;200;500;600;500&display=swap");
+      
+      :root {
+        --doc-color: #337551;
+        --doc-color-light: #337551;
+        --doc-color-dark: #2A5C41;
+      }
+      
+      * {
+        box-sizing: border-box;
+      }
+      
+      body {
+        font-family: "Inter", sans-serif;
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        margin: 0;
+        padding: 0;
+      }
+      
+      .page-container {
+
+        margin: 0 auto;
+        background: white;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+      
+      .content-wrapper {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+      
+      .content-area {
+        flex: 1;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+      
+      .scrollable-content {
+        flex: 1;
+        overflow-y: auto;
+        padding: 0;
+      }
+      
+      .signature-section {
+        flex-shrink: 0;
+        margin-top: auto;
+      }
+      
+      .footer-section {
+        flex-shrink: 0;
+        margin-top: 0;
+      }
+      
+      @media print {
+        body {
+          background: white !important;
+          margin: 0;
+          padding: 0;
+        }
+        
+        .page-container {
+          width: 210mm;
+          height: 297mm;
+          max-height: 297mm;
+          margin: 0;
+          page-break-after: avoid;
+          page-break-inside: avoid;
+        }
+        
+        .avoid-break {
+          page-break-inside: avoid;
+        }
+        
+        .keep-together {
+          page-break-inside: avoid;
+        }
+        
+        table {
+          page-break-inside: avoid;
+        }
+        
+        tr {
+          page-break-inside: avoid;
+          page-break-after: avoid;
+        }
+        
+        thead {
+          display: table-header-group;
+        }
+        
+        thead tr th {
+          background: linear-gradient(to right, var(--doc-color), var(--doc-color-dark)) !important;
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+        }
+        
+        .scrollable-content {
+          overflow: visible;
+        }
+        
+        @page {
+          margin: 0;
+          size: A4;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page-container">
+      <div class="content-wrapper">
+        <div class="content-area">
+          <div class="scrollable-content">
+            <!-- Compact Header - Keep on first page -->
+            <div class="avoid-break">
+              <div class="relative bg-gradient-to-r from-[#337551] to-[#2A5C41] p-2 text-white">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
+                  <div class="flex items-center gap-2">
+                    <div class="bg-gradient-to-r from-[#337551] to-[#337551]/80 p-1.5 rounded-lg">
+                      <img src="{{logoBase64}}" alt="Logo Société" class="w-28 h-8 object-contain bg-white/90 p-1 rounded" />
+                    </div>
+                    <div>
+                      <h1 class="text-lg font-bold tracking-tight">BON DE LIVRAISON</h1>
+                      <div class="inline-block mt-0.5 px-2 py-0.5 bg-white/10 rounded text-xs font-medium">
+                        N°: <span class="font-bold text-white">{{blId}}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="text-right">
+                    <div class="text-xl font-black text-green-200 opacity-90">BL</div>
+                    <div class="text-xs font-medium text-gray-300">{{societe}}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="avoid-break p-2 grid grid-cols-1 lg:grid-cols-2 gap-2">
+              <div class="bg-gradient-to-br from-slate-50 to-white rounded-lg p-2 border border-slate-200">
+                <div class="flex items-center gap-2 mb-1">
+                  <div class="w-1.5 h-4 bg-[#337551] rounded-full"></div>
+                  <h3 class="text-xs font-bold text-gray-800 uppercase">FOURNISSEUR</h3>
+                </div>
+                <div class="space-y-1 text-xs">
+                  <div>
+                    <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Société</div>
+                    <div class="text-xs font-bold text-gray-900">{{societe}}</div>
+                  </div>
+                  <div class="grid grid-cols-2 gap-1">
+                    <div>
+                      <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Matricule</div>
+                      <div class="font-medium text-gray-800 text-xs">{{legalRegistration}}</div>
+                    </div>
+                    <div>
+                      <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Site web</div>
+                      <div class="font-medium text-gray-800 text-xs">{{website}}</div>
+                    </div>
+                    <div>
+                      <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Contact</div>
+                      <div class="font-medium text-gray-800 text-xs">{{contactNumber}}</div>
+                    </div>
+                    <div>
+                      <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider">EMail</div>
+                      <div class="font-medium text-gray-800 text-xs">{{email}}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="bg-gradient-to-br from-[#337551]/10 to-white rounded-lg p-2 border border-[#337551]/20">
+                <div class="flex items-center gap-2 mb-1">
+                  <div class="w-1.5 h-4 bg-[#337551] rounded-full"></div>
+                  <h3 class="text-xs font-bold text-gray-800 uppercase">CLIENT</h3>
+                </div>
+                <div class="space-y-1 text-xs">
+                  <div>
+                    <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Nom</div>
+                    <div class="text-xs font-bold text-gray-900">{{clientName}}</div>
+                  </div>
+                  <div class="grid grid-cols-2 gap-1">
+                    <div>
+                      <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Matricule</div>
+                      <div class="font-medium text-gray-800 text-xs">{{matriculeFiscale}}</div>
+                    </div>
+                    <div>
+                      <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Contact</div>
+                      <div class="font-medium text-gray-800 text-xs">{{clientContact}}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="avoid-break px-2 pb-2">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+                <div class="bg-gradient-to-r from-[#337551]/10 to-[#337551]/5 rounded p-1.5 border border-[#337551]/20">
+                  <div class="text-xs font-semibold text-[#337551] uppercase tracking-wider">Date</div>
+                  <div class="text-xs font-bold text-gray-900">{{createdAt}}</div>
+                </div>
+                <div class="bg-gradient-to-r from-blue-50 to-blue-100 rounded p-1.5 border border-blue-200">
+                  <div class="text-xs font-semibold text-blue-500 uppercase tracking-wider">N° BL</div>
+                  <div class="text-xs font-bold text-gray-900">{{blId}}</div>
+                </div>
+                <div class="bg-gradient-to-r from-purple-50 to-purple-100 rounded p-1.5 border border-purple-200">
+                  <div class="text-xs font-semibold text-purple-500 uppercase tracking-wider">Bon de Commande</div>
+                  <div class="text-xs font-bold text-gray-900">{{bonCommandeId}}</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="p-2">
+              <div class="overflow-hidden rounded-lg border border-gray-200">
+                <table class="min-w-full text-xs" style="font-size: 0.65rem;">
+                  <thead>
+                    <tr class="bg-gradient-to-r from-[#337551] to-[#2A5C41]">
+                      <th class="py-1.5 px-2 text-left text-xs font-bold text-green-200 uppercase tracking-wider border-r border-[#337551]/50">#</th>
+                      <th class="py-1.5 px-2 text-left text-xs font-bold text-green-200 uppercase tracking-wider border-r border-[#337551]/50">Produit</th>
+                      <th class="py-1.5 px-2 text-left text-xs font-bold text-green-200 uppercase tracking-wider border-r border-[#337551]/50">Quantité</th>
+                      <th class="py-1.5 px-2 text-left text-xs font-bold text-green-200 uppercase tracking-wider">Unité</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-gray-200">
+                    {{#each items}}
+                    <tr class="hover:bg-gray-50 keep-together">
+                      <td class="py-1.5 px-2 text-center font-bold text-gray-500 border-r">
+                        <div class="inline-flex items-center justify-center w-5 h-5 bg-gradient-to-r from-[#337551]/10 to-[#337551]/5 rounded-full text-xs">
+                          {{inc @index}}
+                        </div>
+                      </td>
+                      <td class="py-1.5 px-2 font-medium text-gray-900 border-r truncate max-w-[200px]">{{produit}}</td>
+                      <td class="py-1.5 px-2 text-center font-semibold text-gray-900 border-r">{{quantite}}</td>
+                      <td class="py-1.5 px-2 text-center text-gray-500">{{unit}}</td>
+                    </tr>
+                    {{/each}}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Signature Section - Always above footer -->
+          <div class="signature-section avoid-break border-t border-gray-200">
+            <div class="p-2 pb-16">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="text-center">
+                  <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Signature Direction</div>
+                  <div class="w-40 h-0.5 bg-gradient-to-r from-[#337551] to-[#337551]/80 mx-auto"></div>
+                </div>
+
+                <div class="text-center">
+                  <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Signature Client</div>
+                  <div class="w-40 h-0.5 bg-gradient-to-r from-[#337551] to-[#337551]/80 mx-auto"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
