@@ -51,6 +51,7 @@ exports.devis = async (req, res) => {
 
     const browser = await chromium.launch({
       headless: true,
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
     const page = await browser.newPage();
 
@@ -123,7 +124,8 @@ exports.bl = async (req, res) => {
 
     // Launch Chromium
     const browser = await chromium.launch({
-      headless: true, // always headless on server
+      headless: true,
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
     const page = await browser.newPage();
 
@@ -204,6 +206,7 @@ exports.facture = async (req, res) => {
 
     const browser = await chromium.launch({
       headless: true,
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
     const page = await browser.newPage();
 
@@ -277,6 +280,7 @@ exports.avoir = async (req, res) => {
 
     const browser = await chromium.launch({
       headless: true,
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
     const page = await browser.newPage();
 
@@ -361,6 +365,7 @@ exports.journal = async (req, res) => {
 
     const browser = await chromium.launch({
       headless: true,
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
     const page = await browser.newPage();
 
@@ -445,6 +450,7 @@ exports.journalClient = async (req, res) => {
 
     const browser = await chromium.launch({
       headless: true,
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
     const page = await browser.newPage();
 
