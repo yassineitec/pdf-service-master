@@ -80,4 +80,17 @@ router.post("/attestation-domiciliation-salaire", async (req, res) => {
   }
 });
 
+router.post("/lettre-invitation-arx-france", async (req, res) => {
+  try {
+    const pdf = await generateArxPdf("lettre-invitation-arx-france", req.body);
+    res.set({
+      "Content-Type": "application/pdf",
+      "Content-Disposition": 'attachment; filename="lettre-invitation-arx-france.pdf"',
+    });
+    res.send(pdf);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;

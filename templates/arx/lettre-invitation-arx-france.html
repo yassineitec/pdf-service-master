@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: Georgia, 'Times New Roman', Times, serif; font-size: 11pt; color: #000; }
+.page { width: 210mm; min-height: 297mm; padding: 18mm 22mm 30mm; position: relative; background: #fff; }
+.header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14mm; }
+.arx-logo-text { font-family: Arial, Helvetica, sans-serif; font-size: 30pt; font-weight: 900; color: #1e3a5f; line-height: 1; letter-spacing: -1px; }
+.arx-tagline { font-family: Arial, Helvetica, sans-serif; font-size: 6.5pt; color: #666; letter-spacing: 4px; margin-top: 2mm; }
+.sender-block { text-align: right; font-size: 10.5pt; line-height: 1.6; }
+.date-recipient-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10mm; }
+.doc-date { font-size: 10.5pt; }
+.recipient-block { text-align: left; font-size: 10.5pt; line-height: 1.7; }
+.subject-line { margin: 8mm 0 10mm; font-size: 10.5pt; line-height: 1.6; }
+.salutation { margin-bottom: 6mm; font-size: 10.5pt; }
+.body-text { line-height: 1.9; text-align: justify; margin: 4mm 0; font-size: 10.5pt; }
+.signature-block { margin-top: 14mm; text-align: left; line-height: 2; font-size: 10.5pt; }
+.footer-rule { position: absolute; bottom: 20mm; left: 22mm; right: 22mm; height: 1px; background: #ccc; }
+.footer { position: absolute; bottom: 6mm; left: 22mm; right: 22mm; font-family: Arial, Helvetica, sans-serif; font-size: 7pt; color: #888; text-align: center; line-height: 1.7; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    <div>
+      <div class="arx-logo-text">ARX</div>
+      <div class="arx-tagline">S M A R T &nbsp; M I N D S</div>
+    </div>
+    <div class="sender-block">
+      <strong>{{senderName}}</strong><br>
+      {{senderTitle}}<br>
+      {{senderAddress}}<br>
+      {{senderCity}}
+    </div>
+  </div>
+
+  <div class="date-recipient-row">
+    <div class="doc-date">{{senderCity}}, le {{date}}</div>
+    <div class="recipient-block">
+      <strong>Consulat Général de France à Tunis</strong><br>
+      Avenue Habib Bourguiba,<br>
+      Tunis, Tunisie
+    </div>
+  </div>
+
+  <div class="subject-line">
+    <strong>Objet :</strong> Invitation professionnelle pour une réunion de chantier en présentiel<br>
+    <strong>Copie :</strong> ARX Tunisie
+  </div>
+
+  <p class="salutation">Monsieur le Consul,</p>
+
+  <p class="body-text">Agissant en qualité de <strong>{{senderTitle}}</strong> de la société <strong>Arx France</strong>, je vous informe avoir l'intention d'inviter en France le ressortissant étranger ci-après désigné : <strong>{{civilite}} {{fullName}}</strong>, né(e) le <strong>{{birthDate}}</strong> à <strong>{{birthCity}}</strong>, détenteur(trice) du passeport n° <strong>{{passportNumber}}</strong>, résidant actuellement en TUNISIE, {{city}} Tunisie et exerçant la profession de <strong>{{profession}}</strong>.</p>
+
+  <p class="body-text">Cette invitation intervenant dans un cadre strictement professionnel est prévue pour une durée de 30 jours, du <strong>{{tripStartDate}}</strong> au <strong>{{tripEndDate}}</strong>. Elle a pour objectif la réalisation et le suivi des études d'exécution pour le projet <strong>Ligne 15 Grand Paris</strong> dans le cadre de prestations d'études réalisées par ARX Tunisie, sur le projet pour le compte de Arx France.</p>
+
+  <p class="body-text">La présence de <strong>{{civilite}} {{fullName}}</strong> est requise pour coordonner les études, assister aux réunions de chantier et à la réunion d'Audit avec le client d'Arx France. Cette mission d'études ne peut être effectuée à distance ni être reportée dans le temps.</p>
+
+  <p class="body-text">Pendant la durée de son séjour, <strong>{{civilite}} {{fullName}}</strong> résidera dans l'hôtel <strong>{{hotel}}</strong>.</p>
+
+  <p class="body-text">Les frais inhérents au séjour en France de <strong>{{civilite}} {{fullName}}</strong> seront intégralement pris en charge par son employeur, la société <strong>ARX Tunisie</strong> domiciliée au 7, Avenue de Paris, BOUMHEL EL BASSATINE, TUNISIE.</p>
+
+  <p class="body-text">Je reste à votre entière disposition pour vous fournir toute précision utile et vous prie de croire, Monsieur le Consul, en l'assurance de ma respectueuse considération.</p>
+
+  <div class="signature-block">
+    <strong>{{senderName}}</strong><br>
+    {{senderTitle}}
+  </div>
+
+  <div class="footer-rule"></div>
+  <div class="footer">
+    <div><strong>ARX Tunisie</strong> — Bureau d'études en génie civil</div>
+    <div>Siège Social : 7 Avenue de Paris, BOUMHEL EL BASSATINE, 2097, GOUVERNORAT DE BEN AROUS</div>
+    <div style="margin-top:1.5mm;">Page 1 sur 1</div>
+  </div>
+
+</div>
+</body>
+</html>
