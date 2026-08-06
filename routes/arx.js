@@ -93,4 +93,48 @@ router.post("/lettre-invitation-arx-france", async (req, res) => {
   }
 });
 
+// --- Offboarding documents -------------------------------------------------
+// Same one-route-per-template shape as above. These are consumed by rh-service's
+// offboarding stages 4 (décharge de restitution), 5 (attestation de fin de contrat,
+// part of the Kit RH) and 6 (reçu pour solde de tout compte).
+
+router.post("/decharge-restitution", async (req, res) => {
+  try {
+    const pdf = await generateArxPdf("decharge-restitution", req.body);
+    res.set({
+      "Content-Type": "application/pdf",
+      "Content-Disposition": 'attachment; filename="decharge-restitution.pdf"',
+    });
+    res.send(pdf);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.post("/attestation-fin-contrat", async (req, res) => {
+  try {
+    const pdf = await generateArxPdf("attestation-fin-contrat", req.body);
+    res.set({
+      "Content-Type": "application/pdf",
+      "Content-Disposition": 'attachment; filename="attestation-fin-contrat.pdf"',
+    });
+    res.send(pdf);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.post("/recu-solde-tout-compte", async (req, res) => {
+  try {
+    const pdf = await generateArxPdf("recu-solde-tout-compte", req.body);
+    res.set({
+      "Content-Type": "application/pdf",
+      "Content-Disposition": 'attachment; filename="recu-solde-tout-compte.pdf"',
+    });
+    res.send(pdf);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;

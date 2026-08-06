@@ -1,0 +1,96 @@
+<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">
+<!-- Offboarding counterpart of decharge-responsabilite.html. Same house layout, opposite
+     direction: the onboarding decharge says "l'entreprise confie", this one says "restitue".
+     A bulleted list is not enough here because each line carries a return date and a state,
+     so the equipment becomes a table. Items the employee could not return are listed apart
+     and named as written off, since that is what stage 4 records. -->
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Times New Roman', Times, serif; font-size: 12pt; color: #000; }
+.page { width: 210mm; min-height: 297mm; padding: 20mm 25mm; position: relative; background: #fff; }
+.header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12mm; border-bottom: 2px solid #1a6b7c; padding-bottom: 4mm; }
+.company-info { text-align: right; }
+.company-name { font-size: 16pt; font-weight: bold; color: #1a6b7c; letter-spacing: 0.5px; }
+.company-sub { font-size: 9pt; color: #555; margin-top: 1mm; }
+.doc-title { font-size: 14pt; font-weight: bold; text-align: center; text-transform: uppercase; letter-spacing: 1px; margin: 8mm 0 6mm; border-top: 1px solid #ddd; border-bottom: 1px solid #ddd; padding: 3mm 0; }
+.body-text { text-indent: 12mm; line-height: 1.9; text-align: justify; margin: 4mm 0; }
+.asset-table { width: 100%; border-collapse: collapse; margin: 5mm 0; font-size: 10.5pt; }
+.asset-table th { background: #f0f4f5; border: 1px solid #bbb; padding: 2mm 3mm; text-align: left; font-weight: bold; }
+.asset-table td { border: 1px solid #ccc; padding: 2mm 3mm; vertical-align: top; }
+.asset-table .num { width: 8mm; text-align: center; color: #666; }
+.section-label { font-weight: bold; margin: 6mm 0 2mm; }
+.written-off { margin: 2mm 0 4mm 18mm; line-height: 1.8; }
+.muted { color: #666; font-size: 10pt; }
+.signature-row { margin-top: 14mm; display: flex; justify-content: space-between; }
+.signature-cell { width: 70mm; line-height: 2; }
+.signature-cell .rule { margin-top: 18mm; border-top: 1px solid #333; padding-top: 1.5mm; }
+.footer { position: absolute; bottom: 10mm; left: 25mm; right: 25mm; border-top: 1px solid #ccc; padding-top: 2mm; font-size: 8pt; color: #888; display: flex; justify-content: space-between; }
+</style>
+</head>
+<body><div class="page">
+  <div class="header">
+    {{#if logoBase64}}<img src="{{logoBase64}}" style="height:50px;" alt="ARX Logo">{{/if}}
+    <div class="company-info">
+      <div class="company-name">ARX</div>
+      {{#if entityAddress}}<div class="company-sub">{{entityAddress}}</div>{{/if}}
+    </div>
+  </div>
+
+  <div class="doc-title">Decharge de Restitution de Materiel</div>
+
+  <p class="body-text">Je soussigne(e), <strong>{{civilite}} {{fullName}}</strong>, titulaire de la CIN N&deg; {{nationalId}}{{#if cinCity}} delivree a {{cinCity}}{{/if}}{{#if cinDate}} le {{cinDate}}{{/if}}{{#if jobTitle}}, occupant le poste de {{jobTitle}}{{/if}}, reconnais avoir restitue a l'entreprise ARX, dans le cadre de la cessation de mon contrat de travail{{#if lastWorkingDay}} prenant effet le <strong>{{lastWorkingDay}}</strong>{{/if}}, le materiel et les equipements suivants :</p>
+
+  {{#if assets}}
+  <table class="asset-table">
+    <thead>
+      <tr>
+        <th class="num">#</th>
+        <th>Designation</th>
+        <th>N&deg; de serie</th>
+        <th>Restitue le</th>
+        <th>Etat</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each assets}}
+      <tr>
+        <td class="num">{{inc @index}}</td>
+        <td>{{this.label}}{{#if this.notes}}<div class="muted">{{this.notes}}</div>{{/if}}</td>
+        <td>{{#if this.serialNumber}}{{this.serialNumber}}{{else}}&mdash;{{/if}}</td>
+        <td>{{#if this.returnedDate}}{{this.returnedDate}}{{else}}&mdash;{{/if}}</td>
+        <td>{{#if this.condition}}{{this.condition}}{{else}}&mdash;{{/if}}</td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+  {{else}}
+  <p class="body-text muted">Aucun materiel n'etait attribue a l'interesse(e).</p>
+  {{/if}}
+
+  {{#if writtenOff}}
+  <div class="section-label">Materiel non restitue</div>
+  <ul class="written-off">
+    {{#each writtenOff}}
+    <li>{{this.label}}{{#if this.serialNumber}} (N&deg; de serie {{this.serialNumber}}){{/if}} &mdash; declare non restitue{{#if this.notes}} : {{this.notes}}{{/if}}</li>
+    {{/each}}
+  </ul>
+  <p class="body-text">Conformement a la decharge de responsabilite signee lors de la remise du materiel, la valeur des elements non restitues pourra etre retenue sur le solde de tout compte.</p>
+  {{/if}}
+
+  <p class="body-text">Le materiel ci-dessus a ete remis au service informatique, qui en a verifie la conformite. La presente decharge vaut quitus pour les elements declares restitues.</p>
+
+  <p style="margin-top:8mm;">Fait a {{city}}, le {{date}}</p>
+
+  <div class="signature-row">
+    <div class="signature-cell">
+      <div>Le collaborateur</div>
+      <div class="rule">{{civilite}} {{fullName}}</div>
+    </div>
+    <div class="signature-cell" style="text-align:right;">
+      <div>Pour ARX &mdash; Service informatique</div>
+      <div class="rule">{{#if itAgentName}}{{itAgentName}}{{else}}&nbsp;{{/if}}</div>
+    </div>
+  </div>
+
+  <div class="footer"><span>Code de verification : {{verificationCode}}</span><span>{{documentRef}} - {{date}}</span></div>
+</div></body></html>

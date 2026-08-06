@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<!-- Renders the settlement lines recorded in stage 6 (offboarding_settlement_lines). Amounts
+     are signed: a negative line is a retenue, so it prints in parentheses rather than with a
+     minus sign, which is how payroll documents read. `formatMillimes` is the service's own
+     helper (3 decimals) — the DB column is DECIMAL(12,3), so no rounding happens here.
+     The receipt is a discharge: the wording below is what makes the signature meaningful. -->
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: Georgia, 'Times New Roman', Times, serif; font-size: 11pt; color: #000; }
+.page { width: 210mm; min-height: 297mm; padding: 18mm 22mm 30mm; position: relative; background: #fff; }
+.header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10mm; }
+.arx-logo-text { font-family: Arial, Helvetica, sans-serif; font-size: 30pt; font-weight: 900; color: #1e3a5f; line-height: 1; letter-spacing: -1px; }
+.arx-tagline { font-family: Arial, Helvetica, sans-serif; font-size: 6.5pt; color: #666; letter-spacing: 4px; margin-top: 2mm; }
+.company-block { text-align: right; }
+.company-name-hdr { font-family: Arial, Helvetica, sans-serif; font-size: 11pt; font-weight: bold; color: #1e3a5f; }
+.company-sub { font-family: Arial, Helvetica, sans-serif; font-size: 8.5pt; color: #555; margin-top: 1mm; }
+.doc-date { text-align: right; font-size: 10.5pt; margin-bottom: 10mm; }
+.doc-title { font-family: Arial, Helvetica, sans-serif; font-size: 14pt; font-weight: bold; text-align: center; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 3mm; }
+.title-underline { display: block; width: 68%; border: none; border-top: 2px solid #000; margin: 0 auto 8mm; }
+.body-text { line-height: 1.9; text-align: justify; margin: 3.5mm 0; }
+.id-grid { margin: 4mm 0 6mm; font-size: 10.5pt; }
+.id-grid .row { display: flex; line-height: 1.9; }
+.id-grid .k { width: 55mm; color: #555; }
+.id-grid .v { font-weight: bold; }
+.lines { width: 100%; border-collapse: collapse; margin: 4mm 0 2mm; font-size: 10.5pt; }
+.lines th { background: #f0f3f7; border: 1px solid #bbb; padding: 2mm 3mm; text-align: left; font-family: Arial, Helvetica, sans-serif; font-size: 9.5pt; }
+.lines td { border: 1px solid #ccc; padding: 2mm 3mm; vertical-align: top; }
+.lines .num { width: 8mm; text-align: center; color: #666; }
+.lines .amt { width: 34mm; text-align: right; white-space: nowrap; }
+.lines tr.total td { background: #f7f9fb; font-weight: bold; border-top: 2px solid #1e3a5f; }
+.note { color: #666; font-size: 9.5pt; }
+.words { margin: 3mm 0 0; font-size: 10.5pt; }
+.signature-row { margin-top: 12mm; display: flex; justify-content: space-between; }
+.signature-cell { width: 72mm; line-height: 2; font-size: 10.5pt; }
+.signature-cell .rule { margin-top: 16mm; border-top: 1px solid #333; padding-top: 1.5mm; }
+.footer-rule { position: absolute; bottom: 20mm; left: 22mm; right: 22mm; height: 1px; background: #ccc; }
+.footer { position: absolute; bottom: 6mm; left: 22mm; right: 22mm; font-family: Arial, Helvetica, sans-serif; font-size: 7pt; color: #888; text-align: center; line-height: 1.7; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    <div>
+      <div class="arx-logo-text">ARX</div>
+      <div class="arx-tagline">S M A R T &nbsp; M I N D S</div>
+    </div>
+    <div class="company-block">
+      <div class="company-name-hdr">ARX Tunisie</div>
+      <div class="company-sub">Bureau d'études en Génie Civil</div>
+    </div>
+  </div>
+
+  <div class="doc-date">{{city}}, le {{date}}</div>
+
+  <div class="doc-title">Reçu pour Solde de Tout Compte</div>
+  <hr class="title-underline">
+
+  <div class="id-grid">
+    <div class="row"><div class="k">Collaborateur</div><div class="v">{{civilite}} {{fullName}}</div></div>
+    {{#if nationalId}}<div class="row"><div class="k">CIN n°</div><div class="v">{{nationalId}}</div></div>{{/if}}
+    {{#if jobTitle}}<div class="row"><div class="k">Poste occupé</div><div class="v">{{jobTitle}}</div></div>{{/if}}
+    {{#if hireDate}}<div class="row"><div class="k">Date d'embauche</div><div class="v">{{hireDate}}</div></div>{{/if}}
+    {{#if lastWorkingDay}}<div class="row"><div class="k">Dernier jour travaillé</div><div class="v">{{lastWorkingDay}}</div></div>{{/if}}
+    {{#if departureReason}}<div class="row"><div class="k">Motif de départ</div><div class="v">{{departureReason}}</div></div>{{/if}}
+  </div>
+
+  <table class="lines">
+    <thead>
+      <tr>
+        <th class="num">#</th>
+        <th>Rubrique</th>
+        <th class="amt">Montant ({{#if currency}}{{currency}}{{else}}TND{{/if}})</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each lines}}
+      <tr>
+        <td class="num">{{inc @index}}</td>
+        <td>{{this.label}}{{#if this.note}}<div class="note">{{this.note}}</div>{{/if}}</td>
+        <td class="amt">{{#if (gt 0 this.amount)}}({{formatMillimes (subtract 0 this.amount)}}){{else}}{{formatMillimes this.amount}}{{/if}}</td>
+      </tr>
+      {{/each}}
+      <tr class="total">
+        <td class="num"></td>
+        <td>Net à payer</td>
+        <td class="amt">{{formatMillimes total}}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  {{#if totalInWords}}<p class="words">Arrêté à la somme de : <strong>{{totalInWords}}</strong>.</p>{{/if}}
+
+  <p class="body-text">Les montants figurant entre parenthèses constituent des retenues.</p>
+
+  <p class="body-text">Je soussigné(e), <strong>{{civilite}} {{fullName}}</strong>, reconnais avoir reçu de la société <strong>ARX Tunisie</strong> la somme nette indiquée ci-dessus{{#if paymentMode}} par <strong>{{paymentMode}}</strong>{{/if}}{{#if executionDate}}, en date du <strong>{{executionDate}}</strong>{{/if}}, pour solde de tout compte.</p>
+
+  <p class="body-text">Je déclare n'avoir aucune autre réclamation à formuler à l'encontre de la société au titre de l'exécution ou de la rupture de mon contrat de travail, tous salaires, indemnités et accessoires m'ayant été intégralement réglés.</p>
+
+  <div class="signature-row">
+    <div class="signature-cell">
+      <div>Le collaborateur</div>
+      <div class="rule">{{civilite}} {{fullName}}</div>
+    </div>
+    <div class="signature-cell" style="text-align:right;">
+      <div>Pour ARX Tunisie{{#if dgTitle}} — {{dgTitle}}{{/if}}</div>
+      <div class="rule">{{#if dgName}}{{dgName}}{{else}}&nbsp;{{/if}}</div>
+    </div>
+  </div>
+
+  <div class="footer-rule"></div>
+  <div class="footer">
+    <div><strong>ARX Tunisie</strong> — Bureau d'études en génie civil</div>
+    <div>Siège Social : 7 Avenue de Paris, BOUMHEL EL BASSATINE, 2097, GOUVERNORAT DE BEN AROUS</div>
+    <div style="margin-top:1.5mm;">Page 1 sur 1 &nbsp;&nbsp;|&nbsp;&nbsp; Réf : {{documentRef}} &nbsp;&nbsp;|&nbsp;&nbsp; Code vérif. : {{verificationCode}}</div>
+  </div>
+
+</div>
+</body>
+</html>

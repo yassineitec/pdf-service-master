@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<!-- Offboarding sibling of attestation-travail.html: same letterhead, past tense, and it
+     states the end date and the reason for the departure. Kept separate from the certificat
+     de travail because that one attests the *period worked* and is handed to the employee for
+     third parties, while this one is the formal notice that the contract is over. -->
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: Georgia, 'Times New Roman', Times, serif; font-size: 11pt; color: #000; }
+.page { width: 210mm; min-height: 297mm; padding: 18mm 22mm 30mm; position: relative; background: #fff; }
+.header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12mm; }
+.arx-logo-text { font-family: Arial, Helvetica, sans-serif; font-size: 30pt; font-weight: 900; color: #1e3a5f; line-height: 1; letter-spacing: -1px; }
+.arx-tagline { font-family: Arial, Helvetica, sans-serif; font-size: 6.5pt; color: #666; letter-spacing: 4px; margin-top: 2mm; }
+.company-block { text-align: right; }
+.company-name-hdr { font-family: Arial, Helvetica, sans-serif; font-size: 11pt; font-weight: bold; color: #1e3a5f; }
+.company-sub { font-family: Arial, Helvetica, sans-serif; font-size: 8.5pt; color: #555; margin-top: 1mm; }
+.doc-date { text-align: right; font-size: 10.5pt; margin-bottom: 16mm; }
+.doc-title { font-family: Arial, Helvetica, sans-serif; font-size: 14pt; font-weight: bold; text-align: center; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 3mm; }
+.title-underline { display: block; width: 68%; border: none; border-top: 2px solid #000; margin: 0 auto 10mm; }
+.body-text { line-height: 1.9; text-align: justify; margin: 3.5mm 0; }
+.signature-block { margin-top: 14mm; text-align: right; line-height: 2; }
+.footer-rule { position: absolute; bottom: 20mm; left: 22mm; right: 22mm; height: 1px; background: #ccc; }
+.footer { position: absolute; bottom: 6mm; left: 22mm; right: 22mm; font-family: Arial, Helvetica, sans-serif; font-size: 7pt; color: #888; text-align: center; line-height: 1.7; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    <div>
+      <div class="arx-logo-text">ARX</div>
+      <div class="arx-tagline">S M A R T &nbsp; M I N D S</div>
+    </div>
+    <div class="company-block">
+      <div class="company-name-hdr">ARX Tunisie</div>
+      <div class="company-sub">Bureau d'études en Génie Civil</div>
+    </div>
+  </div>
+
+  <div class="doc-date">{{city}}, le {{date}}</div>
+
+  <div class="doc-title">Attestation de Fin de Contrat</div>
+  <hr class="title-underline">
+
+  <p class="body-text">Je soussigné(e), <strong>{{dgName}}</strong>{{#if dgCin}}, titulaire de la CIN n° <strong>{{dgCin}}</strong>{{#if dgCinCity}} délivrée à {{dgCinCity}}{{/if}}{{#if dgCinDate}} le {{dgCinDate}}{{/if}}{{/if}}, agissant en qualité de <strong>{{dgTitle}}</strong> de la société <strong>ARX Tunisie</strong>,</p>
+
+  <p class="body-text">Atteste par la présente que <strong>{{civilite}} {{fullName}}</strong>, titulaire de la CIN n° <strong>{{nationalId}}</strong>{{#if cinCity}} délivrée à {{cinCity}}{{/if}}{{#if cinDate}} le {{cinDate}}{{/if}}, a occupé le poste de <strong>{{jobTitle}}</strong> au sein de notre société{{#if contractDuration}} dans le cadre d'un contrat de travail à durée <strong>{{contractDuration}}</strong>{{/if}}, du <strong>{{hireDate}}</strong> au <strong>{{endDate}}</strong>.</p>
+
+  {{#if departureReason}}
+  <p class="body-text">Le contrat de travail a pris fin le <strong>{{endDate}}</strong> pour le motif suivant : <strong>{{departureReason}}</strong>.</p>
+  {{else}}
+  <p class="body-text">Le contrat de travail a pris fin le <strong>{{endDate}}</strong>.</p>
+  {{/if}}
+
+  {{#if noticePeriodLabel}}
+  <p class="body-text">Le préavis contractuel de <strong>{{noticePeriodLabel}}</strong> a été {{#if noticeWorked}}effectué{{else}}dispensé et indemnisé{{/if}}.</p>
+  {{/if}}
+
+  <p class="body-text">{{civilite}} {{fullName}} est libre de tout engagement envers notre société à compter du <strong>{{endDate}}</strong>.</p>
+
+  <p class="body-text">Cette attestation est délivrée à l'intéressé(e) pour servir et valoir ce que de droit.</p>
+
+  <div class="signature-block">
+    <p><strong>ARX Tunisie</strong></p>
+    <p>{{dgTitle}}</p>
+    <br><br>
+    <p><em>{{dgName}}</em></p>
+  </div>
+
+  <div class="footer-rule"></div>
+  <div class="footer">
+    <div><strong>ARX Tunisie</strong> — Bureau d'études en génie civil</div>
+    <div>Siège Social : 7 Avenue de Paris, BOUMHEL EL BASSATINE, 2097, GOUVERNORAT DE BEN AROUS</div>
+    <div style="margin-top:1.5mm;">Page 1 sur 1 &nbsp;&nbsp;|&nbsp;&nbsp; Réf : {{documentRef}} &nbsp;&nbsp;|&nbsp;&nbsp; Code vérif. : {{verificationCode}}</div>
+  </div>
+
+</div>
+</body>
+</html>
