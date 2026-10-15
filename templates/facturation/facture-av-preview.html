@@ -199,9 +199,11 @@ body { font-family: Arial, Helvetica, sans-serif; color: #111827; }
   </div>
 
   <div class="payment-note">
-    <p>{{{labels.paymentNote}}}</p>
+    <p>{{{paymentNote}}}</p>
+    {{#if showBankDetails}}
     <p class="light">IBAN : <strong>TN59 0302 7157 0191 0290 27 54</strong></p>
     <p class="light">BIC/SWIFT : <strong>BNTETNTT</strong></p>
+    {{/if}}
   </div>
 
   <div class="legal-footer">
