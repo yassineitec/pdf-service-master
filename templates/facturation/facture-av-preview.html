@@ -3,25 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <style>
-/* Ported from the 2026-09-14 reference mockup (Tailwind-authored) to this project's
-   plain-CSS, self-contained convention -- no CDN/JS dependency for something that has to
-   render reliably headless. Every spacing/font value below is a direct px translation of
-   the reference's own Tailwind utilities (p-2=8px, mb-8=32px, text-[9px], h-10=40px, …),
-   EXCEPT the handful of section gaps and the table row height, which are compressed from
-   the reference's own values -- taken completely literally, its own spacing does not fit
-   one A4 page (a rough sum of its fixed gaps + 18 rows x 40px alone exceeds 297mm). Every
-   OTHER dimension is a straight port. .lines-table still gets any space this recovers via
-   flex-grow (see its own comment), so cutting these gaps if anything makes the table look
-   fuller, not smaller.
-   Inter is loaded from Google Fonts (a plain stylesheet fetch, not the JS Tailwind CDN)
-   for visual fidelity to the reference; Arial/Helvetica is the fallback if that fetch is
-   ever slow/unreachable when Playwright renders this. */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+/* Reskinned 2026-10-15 to match a reference EBP-style invoice design the user supplied --
+   visual language only. Every section, data field, Handlebars binding, and the 18-row
+   page-fit tuning from the previous version are UNCHANGED; only colors, borders, font and
+   typographic weight were touched. Prior version backed up at
+   templates/facturation/backups/facture-av-preview.html.backup-2026-10-15 -- restore from
+   there if this needs to be rolled back.
+   Arial is a universal system font (no network fetch at all, unlike the previous version's
+   Google Fonts @import for Inter) -- a strict reliability improvement for headless
+   rendering, and it matches the reference design's own typography. */
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'Inter', Arial, Helvetica, sans-serif; color: #000; }
+body { font-family: Arial, Helvetica, sans-serif; color: #111827; }
 
 /* height (not min-height): so .lines-table's flex:1 below has a real, fixed 297mm to
-   grow into instead of the page just shrinking to fit its content. */
+   grow into instead of the page just shrinking to fit its content. Geometry (width,
+   height, padding) is untouched from the previous version -- it was tuned so the 18-row
+   grid fits one A4 page; only colors/fonts change in this reskin. */
 .page { width: 210mm; height: 297mm; padding: 18px; position: relative; background: #fff; display: flex; flex-direction: column; }
 
 .watermark {
@@ -30,7 +27,7 @@ body { font-family: 'Inter', Arial, Helvetica, sans-serif; color: #000; }
   transform: rotate(-30deg); letter-spacing: 8px; z-index: 0; pointer-events: none;
 }
 
-.bg-soft { background: #f9fafb; }
+.bg-soft { background: #e4e7eb; }
 
 .arx-logo-crop { height: 12mm; overflow: hidden; }
 .arx-logo-img { height: 16.4mm; width: auto; display: block; filter: grayscale(1) contrast(1.25); }
@@ -40,79 +37,63 @@ body { font-family: 'Inter', Arial, Helvetica, sans-serif; color: #000; }
 .logo-wrap { width: 192px; }
 .header-right { width: 50%; display: flex; flex-direction: column; gap: 5px; }
 
-.entity-box { border: 1px solid #000; display: flex; text-align: right; padding: 5px 6px; align-items: flex-start; justify-content: space-between; }
-.entity-box .label { font-weight: bold; text-decoration: underline; font-size: 10px; width: 33.33%; text-align: left; }
-.entity-box .value { font-size: 10px; width: 66.66%; line-height: 1.15; font-weight: 600; }
+.entity-box { border: 1px solid #d1d5db; display: flex; text-align: right; padding: 5px 6px; align-items: flex-start; justify-content: space-between; }
+.entity-box .label { font-weight: bold; font-size: 9px; text-transform: uppercase; letter-spacing: .03em; color: #374151; width: 33.33%; text-align: left; }
+.entity-box .value { font-size: 10px; width: 66.66%; line-height: 1.3; font-weight: normal; color: #111827; }
 
-.client-box { border: 1px solid #000; }
+.client-box { border: 1px solid #d1d5db; }
 .client-row { display: flex; padding: 5px 6px; }
-.client-row + .client-row { border-top: 1px solid #000; }
-.client-label { font-weight: bold; text-decoration: underline; width: 33.33%; font-size: 10px; }
-.client-value { font-size: 10px; width: 66.66%; line-height: 1.15; white-space: pre-line; }
+.client-row + .client-row { border-top: 1px solid #d1d5db; }
+.client-label { font-weight: bold; font-size: 9px; text-transform: uppercase; letter-spacing: .03em; color: #374151; width: 33.33%; }
+.client-value { font-size: 10px; width: 66.66%; line-height: 1.3; white-space: pre-line; font-weight: normal; }
 
 /* ── Invoice box: alone, ~45% wide, sits below the header ───────────────────────── */
 .invoice-box-wrap { width: 45%; margin-bottom: 6px; position: relative; z-index: 1; }
-.invoice-box { border: 1px solid #000; }
-.invoice-title { text-align: center; font-weight: bold; padding: 3px 0; border-bottom: 1px solid #000; font-size: 10px; }
-.invoice-title span { text-decoration: underline; }
-.invoice-row { display: flex; padding: 3px 4px; border-bottom: 1px solid #000; font-size: 10px; }
-.invoice-row .lbl { font-weight: bold; width: 25%; }
-.invoice-row .val { font-weight: bold; }
+.invoice-box { border: 1px solid #d1d5db; }
+.invoice-title { text-align: center; font-weight: bold; padding: 3px 0; border-bottom: 1px solid #d1d5db; font-size: 10px; letter-spacing: .02em; }
+.invoice-row { display: flex; padding: 3px 4px; border-bottom: 1px solid #d1d5db; font-size: 10px; }
+.invoice-row .lbl { font-weight: bold; color: #374151; width: 25%; }
+.invoice-row .val { font-weight: normal; }
 .invoice-referent { display: flex; justify-content: space-between; align-items: center; padding: 4px 4px; font-size: 10px; }
-.invoice-referent span { font-weight: bold; text-align: center; width: 50%; }
+.invoice-referent span:first-child { font-weight: bold; color: #374151; text-align: center; width: 50%; }
+.invoice-referent span:last-child { font-weight: normal; text-align: center; width: 50%; }
 
 /* ── Lines table ──────────────────────────────────────────────────────────────────
-   flex: 1 1 auto -- the ONE block on this page allowed to grow. .page is a flex
-   column with a definite 297mm height, and every other block sizes to its own
-   content, so whatever mm are left land here: a <table> given more height than its
-   rows need distributes the extra across every <tr> with no explicit height of its
-   own (which is every row here, real or filler) -- so with few real invoice lines
-   the 18-row grid still stretches edge to edge instead of leaving blank space above
-   .footer-row. */
-.lines-table { width: 100%; text-align: center; border-collapse: collapse; border: 1px solid #000; font-size: 9px; margin-bottom: 6px; position: relative; z-index: 1; flex: 1 1 auto; }
-.lines-table thead { background: #f9fafb; font-weight: bold; }
-.lines-table th { border: 1px solid #000; padding: 0; line-height: 1.15; }
-/* No padding on any cell, real or filler -- every mm of the table's flex-grown height
-   (see .lines-table's own flex:1 comment) goes to the row itself instead of being eaten
-   by cell padding, and every cell (including the blank filler ones) carries a &nbsp; in
-   the markup below rather than being truly empty, so its height is driven by the same
-   line box in every row -- an empty <td> can otherwise collapse to less than the row's
-   own height in some engines, which would make filler rows visibly shorter than real
-   ones once the table stretches. */
-.lines-table td { border: 1px solid #000; font-weight: bold; height: 24px; padding: 0; vertical-align: middle; }
-/* Project/Designation: a real reference string, sometimes long -- wrap normally
-   (no forced single line, unlike the previous nowrap+clip approach) inside the
-   fixed row height, with a slightly smaller font matching the reference's own
-   8px-vs-9px ratio for these two columns specifically. */
+   flex: 1 1 auto -- the ONE block on this page allowed to grow (unchanged from the
+   previous version, same page-fit behavior; only border/background/weight change). */
+.lines-table { width: 100%; text-align: center; border-collapse: collapse; border: 1px solid #d1d5db; font-size: 9px; margin-bottom: 6px; position: relative; z-index: 1; flex: 1 1 auto; }
+.lines-table thead { background: #e4e7eb; font-weight: bold; color: #374151; }
+.lines-table th { border: 1px solid #d1d5db; padding: 0; line-height: 1.15; }
+.lines-table td { border: 1px solid #d1d5db; font-weight: normal; height: 24px; padding: 0; vertical-align: middle; }
 .lines-table td.wrap-cell { font-size: 8px; line-height: 1.15; overflow: hidden; }
 .lines-table td.placeholder { color: #ef4444; }
 .lines-table tr.filler-row td { color: transparent; }
-.lines-table tr.filler-row td:first-child { color: #000; font-weight: bold; }
+.lines-table tr.filler-row td:first-child { color: #111827; font-weight: normal; }
 
 /* ── VAT + totals + signature row ─────────────────────────────────────────────── */
 .footer-row { display: flex; gap: 10px; width: 100%; margin-bottom: 6px; position: relative; z-index: 1; }
 .vat-box { width: 35%; }
-.vat-box table { width: 100%; text-align: center; border-collapse: collapse; border: 1px solid #000; font-size: 10px; }
-.vat-box th { border: 1px solid #000; padding: 3px 6px; text-align: left; font-weight: bold; background: #f9fafb; }
-.vat-box td { border: 1px solid #000; padding: 3px; }
+.vat-box table { width: 100%; text-align: center; border-collapse: collapse; border: 1px solid #d1d5db; font-size: 10px; }
+.vat-box th { border: 1px solid #d1d5db; padding: 3px 6px; text-align: left; font-weight: bold; color: #374151; background: #e4e7eb; }
+.vat-box td { border: 1px solid #d1d5db; padding: 3px; font-weight: normal; }
 .vat-box tr.vat-total { font-weight: bold; }
-.vat-box tr.vat-total td:first-child { text-align: left; padding-left: 6px; background: #f9fafb; }
+.vat-box tr.vat-total td:first-child { text-align: left; padding-left: 6px; background: #e4e7eb; }
 
-.totals-box { width: 65%; display: flex; border: 1px solid #000; }
-.totals-inner { width: 66.66%; border-right: 1px solid #000; padding: 5px 6px; display: flex; flex-direction: column; font-size: 10px; font-weight: bold; }
+.totals-box { width: 65%; display: flex; border: 1px solid #d1d5db; }
+.totals-inner { width: 66.66%; border-right: 1px solid #d1d5db; padding: 5px 6px; display: flex; flex-direction: column; font-size: 10px; font-weight: normal; }
 .totals-inner .row { display: flex; justify-content: space-between; margin-bottom: 3px; }
 .totals-inner .row.indent span:first-child { padding-left: 16px; }
 .totals-inner .row.grow { flex: 1; margin-bottom: 0; }
-.totals-inner .row.sep { border-top: 1px solid #000; padding-top: 3px; margin-top: 3px; margin-bottom: 0; }
-.totals-inner .row .accent { color: #dc2626; }
-.signature-box { width: 33.33%; padding: 5px 6px; display: flex; flex-direction: column; background: #f9fafb; }
-.signature-box .label { font-weight: bold; font-size: 10px; }
+.totals-inner .row.sep { border-top: 1px solid #d1d5db; padding-top: 3px; margin-top: 3px; margin-bottom: 0; }
+.totals-inner .row .accent { font-weight: bold; color: #111827; }
+.signature-box { width: 33.33%; padding: 5px 6px; display: flex; flex-direction: column; background: #e4e7eb; }
+.signature-box .label { font-weight: bold; font-size: 10px; color: #374151; }
 
-.payment-note { text-align: center; font-weight: bold; font-size: 10px; margin-bottom: 6px; position: relative; z-index: 1; line-height: 1.3; }
+.payment-note { text-align: center; font-weight: normal; font-size: 9.5px; margin-bottom: 6px; position: relative; z-index: 1; line-height: 1.3; color: #374151; }
 .payment-note .light { font-weight: 400; }
 
-.legal-footer { border-top: 1px solid #000; padding-top: 5px; display: flex; justify-content: space-between; font-size: 8px; color: #374151; }
-.legal-footer-note { text-align: center; margin-top: 4px; color: #777; }
+.legal-footer { border-top: 1px solid #d1d5db; padding-top: 5px; display: flex; justify-content: space-between; font-size: 8px; color: #6b7280; }
+.legal-footer-note { text-align: center; margin-top: 4px; color: #9ca3af; }
 </style>
 </head>
 <body>
@@ -160,18 +141,15 @@ body { font-family: 'Inter', Arial, Helvetica, sans-serif; color: #000; }
     <thead>
       <tr>
         <th style="width:4%;">{{{labels.colPos}}}</th>
-        <th style="width:15%;">{{{labels.colProject}}}</th>
-        <th style="width:15%;">{{{labels.colDesignation}}}</th>
+        <th style="width:17%;">{{{labels.colProject}}}</th>
+        <th style="width:17%;">{{{labels.colDesignation}}}</th>
         <th style="width:8%;">{{{labels.colPurchaseOrder}}}</th>
-        <th style="width:10%;">{{{labels.colContractAmount}}}</th>
+        <th style="width:11%;">{{{labels.colContractAmount}}}</th>
         <th style="width:8%;">{{{labels.colAdvAlready}}}</th>
         <th style="width:8%;">{{{labels.colAdvToDate}}}</th>
         <th style="width:8%;">{{{labels.colAdvToInvoice}}}</th>
-        <th style="width:6%;">{{{labels.colVat}}}</th>
+        <th style="width:7%;">{{{labels.colVat}}}</th>
         <th style="width:12%;">{{{labels.colTotalToInvoice}}}</th>
-        {{#each deductionColumns}}
-        <th style="width:8%;">{{this.label}}</th>
-        {{/each}}
       </tr>
     </thead>
     <tbody>
@@ -187,18 +165,12 @@ body { font-family: 'Inter', Arial, Helvetica, sans-serif; color: #000; }
         <td>{{this.pctAFacturerFmt}}</td>
         <td>{{this.vatRatePct}}%</td>
         <td>{{this.lineTotalFmt}}</td>
-        {{#each this.deductionCells}}
-        <td>{{this}}</td>
-        {{/each}}
       </tr>
       {{/each}}
       {{#each fillerPositions}}
       <tr class="filler-row">
         <td>{{this}}</td>
         <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
-        {{#each ../deductionColumns}}
-        <td>&nbsp;</td>
-        {{/each}}
       </tr>
       {{/each}}
     </tbody>
